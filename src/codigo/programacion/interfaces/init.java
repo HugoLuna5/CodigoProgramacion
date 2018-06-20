@@ -9,9 +9,6 @@ package codigo.programacion.interfaces;
  *
  * @author HugoLuna
  */
-public interface Go {
-    
-    void goTo();
-    void goTo(String screen);
-    
+public interface init {
+    void initViews();
 }

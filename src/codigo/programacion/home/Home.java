@@ -424,13 +424,32 @@ public class Home extends javax.swing.JFrame implements Go {
     private void userNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userNameMouseClicked
         // TODO add your handling code here:
         
-        goTo();
+        goTo("Admin");
     }//GEN-LAST:event_userNameMouseClicked
 
-    public void goTo(){
-        Admin admin = new Admin(user);
+    
+    
+    @Override
+    public void goTo(String screen) {
+        switch (screen) {
+            case "Home":
+                Home home = new Home(user);
+                this.dispose();
+                home.setVisible(true);
+                break;
+            case "Admin":
+                 Admin admin = new Admin(user);
         this.dispose();
         admin.setVisible(true);
+                break;
+            default:
+                break;
+        }
+    }
+    
+    @Override
+    public void goTo() {
+        
     }
     
     

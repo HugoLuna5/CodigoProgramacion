@@ -6,24 +6,28 @@
 package codigo.programacion.admin;
 
 import codigo.programacion.conexionDB.DB;
-import codigo.programacion.model.ModelTable;
+import codigo.programacion.curso.CursoView;
+import codigo.programacion.home.Home;
+import codigo.programacion.interfaces.Go;
+import codigo.programacion.model.Curso;
 import codigo.programacion.model.User;
+import codigo.programacion.utils.CursoRenderer;
 import codigo.programacion.utils.EncryptingData;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
@@ -33,13 +37,16 @@ import org.apache.commons.net.ftp.FTPClient;
  *
  * @author HugoLuna
  */
-public class Admin extends javax.swing.JFrame {
+public class Admin extends javax.swing.JFrame implements Go {
 
     /**
      * Create variables for class Admin
      */
+    ;
     public File fileForImageCourse = null;
-
+    public DefaultListModel<Curso> model;
+    int counter = 0;
+    int position = 0;
     /**
      * Creates new form Admi
      */
@@ -49,17 +56,63 @@ public class Admin extends javax.swing.JFrame {
         initComponents();
         user = us;
         contentView();
+
     }
 
     public void contentView() {
         userName.setText(user.getUsuario());
-        
-        
-        ModelTable mt = new ModelTable();
-        tableCourses.setModel(mt);
-        
-        
-       
+
+        poblateList();
+
+    }
+
+    public void poblateList() {
+
+        createList();
+
+    }
+
+    private void createList() {
+        // create List model
+        model = new DefaultListModel<>();
+
+        try {
+
+            Connection bd = DB.getConection();
+            Statement state = bd.createStatement();
+
+            String consulta = "SELECT * FROM curso";
+            ResultSet resultset = state.executeQuery(consulta);
+
+            if (resultset != null) {
+
+                while (resultset.next()) {
+                    // get fields
+                    String id = resultset.getString("id");
+                    String nombre = resultset.getString("nombre");
+                    String descripcion = resultset.getString("descripcion");
+                    String autor = resultset.getString("autor");
+                    String estudiantes = resultset.getString("estudiantes");
+                    String img = resultset.getString("img");
+                    String created_at = resultset.getString("created_at");
+
+                    model.addElement(new Curso(id, nombre, descripcion, autor, estudiantes, img, created_at));
+
+                }
+
+            }
+            counter = resultset.getFetchSize();
+            System.out.println("cont: " + counter);
+
+        } catch (Exception e) {
+            System.err.println("Error al traer los datos para la lista");
+        }
+
+        // create JList with model
+        List.setModel(model);
+        // set cell renderer
+        List.setCellRenderer(new CursoRenderer());
+
     }
 
     /**
@@ -75,7 +128,7 @@ public class Admin extends javax.swing.JFrame {
         jPanel10 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        Home = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -94,9 +147,19 @@ public class Admin extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         descCourse = new javax.swing.JTextArea();
         jLabel4 = new javax.swing.JLabel();
-        containerTabla = new javax.swing.JPanel();
+        containerCursos = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tableCourses = new javax.swing.JTable();
+        List = new javax.swing.JList<>();
+        btnAddContent = new java.awt.Button();
+        deleteCourse = new java.awt.Button();
+        fieldName = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        fieldDescripcion = new javax.swing.JTextArea();
+        viewCourse = new java.awt.Button();
+        fieldUrl = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1300, 755));
@@ -125,10 +188,15 @@ public class Admin extends javax.swing.JFrame {
         jLabel6.setText("jLabel3");
         jPanel10.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 70, 50));
 
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/home.png"))); // NOI18N
-        jLabel7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel10.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 70, 50));
+        Home.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Home.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/home.png"))); // NOI18N
+        Home.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        Home.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                HomeMouseClicked(evt);
+            }
+        });
+        jPanel10.add(Home, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 70, 50));
 
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/play-button.png"))); // NOI18N
@@ -283,22 +351,93 @@ public class Admin extends javax.swing.JFrame {
 
         jPanel9.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 100, 400, 410));
 
-        containerTabla.setBackground(new java.awt.Color(255, 255, 255));
+        containerCursos.setBackground(new java.awt.Color(255, 255, 255));
 
-        jScrollPane2.setViewportView(tableCourses);
+        List.setSelectionBackground(new java.awt.Color(0, 102, 204));
+        List.setSelectionForeground(new java.awt.Color(0, 102, 204));
+        jScrollPane2.setViewportView(List);
+        List.getAccessibleContext().setAccessibleName("List");
 
-        javax.swing.GroupLayout containerTablaLayout = new javax.swing.GroupLayout(containerTabla);
-        containerTabla.setLayout(containerTablaLayout);
-        containerTablaLayout.setHorizontalGroup(
-            containerTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
+        btnAddContent.setLabel("Agregar contenido");
+        btnAddContent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddContentActionPerformed(evt);
+            }
+        });
+
+        deleteCourse.setLabel("Eliminar Curso");
+        deleteCourse.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                deleteCourseMouseClicked(evt);
+            }
+        });
+
+        jLabel7.setText("Nombre del Contenido");
+
+        jLabel10.setText("Descripcion del contenido");
+
+        fieldDescripcion.setColumns(15);
+        fieldDescripcion.setRows(7);
+        fieldDescripcion.setToolTipText("Descripcion del contenido");
+        jScrollPane3.setViewportView(fieldDescripcion);
+
+        viewCourse.setLabel("Ver Curso");
+        viewCourse.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                viewCourseMouseClicked(evt);
+            }
+        });
+
+        jLabel11.setText("Url del video");
+
+        javax.swing.GroupLayout containerCursosLayout = new javax.swing.GroupLayout(containerCursos);
+        containerCursos.setLayout(containerCursosLayout);
+        containerCursosLayout.setHorizontalGroup(
+            containerCursosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(containerCursosLayout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addGroup(containerCursosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAddContent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(containerCursosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(containerCursosLayout.createSequentialGroup()
+                            .addComponent(deleteCourse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
+                            .addComponent(viewCourse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(fieldName, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(fieldUrl, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.LEADING)))
+                .addGap(64, 64, 64))
         );
-        containerTablaLayout.setVerticalGroup(
-            containerTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
+        containerCursosLayout.setVerticalGroup(
+            containerCursosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, containerCursosLayout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fieldUrl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnAddContent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25)
+                .addGroup(containerCursosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(deleteCourse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(viewCourse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
-        jPanel9.add(containerTabla, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 100, 730, 410));
+        jPanel9.add(containerCursos, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 100, 730, 410));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -347,11 +486,20 @@ public class Admin extends javax.swing.JFrame {
 
                 Admin ad = new Admin(user);
 
-                try {
-                    
-                    ad.upload(fileForImageCourse.getPath().toString(), name, true);
+                /**
+                 * generar nombre
+                 */
+                File parent = fileForImageCourse.getParentFile();
+                String filename = name + fileForImageCourse.getName().toLowerCase();
+                File doo = new File(parent, filename);
+                fileForImageCourse.renameTo(doo);
+                File newfile = doo;
 
-                    registerInDBCourse(name, user);
+                try {
+
+                    ad.upload(newfile.getPath().toString(), newfile.getName(), true);
+
+                    registerInDBCourse(newfile.getName(), user);
 
                 } catch (IOException ex) {
                     Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
@@ -379,7 +527,7 @@ public class Admin extends javax.swing.JFrame {
 
         jfc.setDialogTitle("Selecciona una imagen");
         jfc.setAcceptAllFileFilterUsed(false);
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG JPGE JPG", "png", "jpge", "jpg");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG JPEG JPG", "png", "jpeg", "jpg");
         jfc.addChoosableFileFilter(filter);
         int returnValue = jfc.showOpenDialog(null);
 
@@ -394,6 +542,110 @@ public class Admin extends javax.swing.JFrame {
             selectFile.setText("Seleccionaste el siguiente archivo: " + selectedFile.getName());
         }
     }//GEN-LAST:event_selectFileMouseClicked
+
+    private void HomeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HomeMouseClicked
+        // TODO add your handling code here:
+
+        goTo("Home");
+
+    }//GEN-LAST:event_HomeMouseClicked
+
+    private void btnAddContentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddContentActionPerformed
+        // TODO add your handling code here:
+
+        int selectedIndex = List.getSelectedIndex();
+
+        if (selectedIndex != -1) {//validate index list 
+
+            String nameContent = fieldName.getText().toString();
+            String urlContent = fieldUrl.getText().toString();
+            String descripcion = fieldDescripcion.getText().toString();
+            String id_course = model.get(selectedIndex).getId();
+            if (!nameContent.isEmpty() && !urlContent.isEmpty() && !descripcion.isEmpty()) {
+
+                Connection conDB = DB.getConection();
+
+                try {
+
+                    String queryInsert = " INSERT INTO contenido (id_curso, nombre, url, descripcion)"
+                            + " values (?, ?, ?, ?)";
+
+                    PreparedStatement preparedStmt = conDB.prepareStatement(queryInsert);
+                    preparedStmt.setString(1, id_course);
+                    preparedStmt.setString(2, nameContent);
+                    preparedStmt.setString(3, urlContent);
+                    preparedStmt.setString(4, descripcion);
+
+                    //preparedStmt
+                    preparedStmt.execute();
+                    fieldName.setText("");
+                    fieldUrl.setText("");
+                    fieldDescripcion.setText("");
+
+                    JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Se agrego correctamente el contenido al curso: " + model.get(selectedIndex).getNombre(), "¡Felicidades!", JOptionPane.INFORMATION_MESSAGE);
+
+                    conDB.close();//cerrando conexion con la base de datos
+
+                } catch (SQLException err) {
+                    System.err.println("Error sql: " + err.getMessage());
+
+                }
+
+            }
+
+            System.out.println(model.get(selectedIndex).getNombre());
+        } else {
+            JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Es posible que no exista contenido, o no hayas selecciona un curso ", "¡Upss!", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_btnAddContentActionPerformed
+
+    private void deleteCourseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteCourseMouseClicked
+        // TODO add your handling code here:
+        int selectedIndex = List.getSelectedIndex();
+
+        if (selectedIndex != -1) {//validate index list 
+            try {
+                String id_course = model.get(selectedIndex).getId();
+
+                Connection bd = DB.getConection();
+                Statement state = bd.createStatement();
+
+                String consulta = "DELETE FROM curso WHERE id = '" + id_course + "'";
+
+                PreparedStatement preparedStmt = bd.prepareStatement(consulta);
+                // execute the preparedstatement
+                preparedStmt.execute();
+                JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Se elimino correctamente el contenido al curso: " + model.get(selectedIndex).getNombre(), "¡Felicidades!", JOptionPane.INFORMATION_MESSAGE);
+                model.remove(selectedIndex);
+                bd.close();
+            } catch (Exception e) {
+
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Es posible que no exista contenido, o no hayas selecciona un curso ", "¡Upss!", JOptionPane.ERROR_MESSAGE);
+
+        }
+
+
+    }//GEN-LAST:event_deleteCourseMouseClicked
+
+    private void viewCourseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewCourseMouseClicked
+        // TODO add your handling code here:
+        
+        
+        int selectedIndex = List.getSelectedIndex();
+
+        if (selectedIndex != -1) {//validate index list 
+            //id_curso
+            String id_course = model.get(selectedIndex).getId();
+            this.dispose();
+            CursoView cv = new CursoView(user, id_course);
+            cv.setVisible(true);
+        }
+        
+    }//GEN-LAST:event_viewCourseMouseClicked
 
     /**
      * Method for register dat in DB
@@ -475,8 +727,7 @@ public class Admin extends javax.swing.JFrame {
             resultOk &= ftpClient.logout();
 
             JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Archivo guardado correctamente", "¡Felicidades!", JOptionPane.INFORMATION_MESSAGE);
-            
-            
+
             if (showMessages) {
                 System.out.println(ftpClient.getReplyString());
             }
@@ -495,11 +746,20 @@ public class Admin extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Home;
+    public javax.swing.JList<Curso> List;
+    private java.awt.Button btnAddContent;
     private javax.swing.JButton btnSubmitCourse;
     private java.awt.Button button1;
-    private javax.swing.JPanel containerTabla;
+    private javax.swing.JPanel containerCursos;
+    private java.awt.Button deleteCourse;
     private javax.swing.JTextArea descCourse;
+    private javax.swing.JTextArea fieldDescripcion;
+    private javax.swing.JTextField fieldName;
+    private javax.swing.JTextField fieldUrl;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -515,11 +775,30 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField nameCourse;
     private javax.swing.JLabel photoProfile;
     private javax.swing.JButton selectFile;
-    private javax.swing.JTable tableCourses;
     private javax.swing.JLabel userName;
+    private java.awt.Button viewCourse;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void goTo(String screen) {
+        switch (screen) {
+            case "Home":
+                Home home = new Home(user);
+                this.dispose();
+                home.setVisible(true);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void goTo() {
+
+    }
 }

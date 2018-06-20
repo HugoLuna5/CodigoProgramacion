@@ -5,6 +5,11 @@
  */
 package codigo.programacion.model;
 
+import codigo.programacion.conexionDB.DB;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -14,35 +19,44 @@ import javax.swing.table.AbstractTableModel;
 public class ModelTable extends AbstractTableModel {
 
     
-    
-    
+    char mander;
     String[] columnNames = {
-            "Id", "Nombre", "Estudiantes", "Acciones"
-        };
+        "Id", "Nombre", "Estudiantes", "Acciones"
+    };
 
-    
-    
-  
-    
-    
-    
+    public ModelTable() {
+        this.initObject();
+    }
+
+    public void initObject() {
+
+        try {
+
+            Connection codigoPro = DB.getConection();
+            Statement state = codigoPro.createStatement();
+
+            @SuppressWarnings("deprecation")
+            String query = "SELECT * FROM curso";
+
+            ResultSet rs = state.executeQuery(query);
+
+            boolean masuk = false;
+            masuk = rs.next();
+         
+
+        } catch (SQLException ex) {
+            System.err.println("Error: " + ex.getMessage());
+        }
+
+    }
+
     Object[][] data = {
-       {"Saira", "B.Tech",
-        "VTU", new Integer(2015)},
-       {"Smaira", "B.Sc",
-            "CBSE", new Integer(2007)},
-       {"John", "M.tech",
-                "IIT", new Integer(2009)},
-       {"Jia", "M.Sc",
-                    "Thapar", new Integer(2011)},
-       {"Kerry", "B.Com",
-                        "DU", new Integer(2014)}
-       
-       };
+        {new  Integer(1), "Android",
+            new Integer(0),"Acciones"},
+        {new Integer(2),"Web", new Integer(0),"Acciones"}
 
-    
-    
-    
+    };
+
     public int getColumnCount() {
         return columnNames.length;
     }
