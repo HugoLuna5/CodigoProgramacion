@@ -5,8 +5,6 @@
  */
 package codigo.programacion.curso;
 
-import chrriis.dj.nativeswing.swtimpl.NativeInterface;
-import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 import codigo.programacion.conexionDB.DB;
 import codigo.programacion.home.Home;
 import codigo.programacion.interfaces.Go;
@@ -359,20 +357,11 @@ public class CursoDetail extends javax.swing.JFrame implements Go, init {
     public static void main(String[] args) {
 
         CursoDetail cd = new CursoDetail();
-        NativeInterface.open();
-
-        cd.containerVideo.add(getBrowserPanel(), BorderLayout.CENTER);
+   
         cd.containerVideo.setSize(800, 600);
     }
 
-    public static JPanel getBrowserPanel() {
-        JPanel webBrowserPanel = new JPanel(new BorderLayout());
-        JWebBrowser webBrowser = new JWebBrowser();
-        webBrowserPanel.add(webBrowser, BorderLayout.CENTER);
-        webBrowser.setBarsVisible(false);
-        webBrowser.navigate("https://www.youtube.com/v/" + getURL());
-        return webBrowserPanel;
-    }
+
 
     public static String getURL() {
 
