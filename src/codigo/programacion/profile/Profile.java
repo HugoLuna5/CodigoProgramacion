@@ -5,10 +5,25 @@
  */
 package codigo.programacion.profile;
 
+import codigo.programacion.Documentacion.Documentacion;
+import codigo.programacion.Search.Search;
+import codigo.programacion.admin.Admin;
 import codigo.programacion.conexionDB.DB;
+import codigo.programacion.curso.AllCourses;
+import codigo.programacion.curso.CursoDetail;
+import static codigo.programacion.curso.CursoDetail.id_course;
+import static codigo.programacion.curso.CursoDetail.user;
+import codigo.programacion.curso.CursoView;
+import static codigo.programacion.curso.CursoView.id_contenido;
+import static codigo.programacion.curso.CursoView.id_course;
 import codigo.programacion.home.Home;
+import codigo.programacion.interfaces.Go;
+import codigo.programacion.interfaces.init;
+import codigo.programacion.model.Contenido;
 import codigo.programacion.model.Curso;
 import codigo.programacion.model.User;
+import codigo.programacion.utils.ContenidoRenderer;
+import codigo.programacion.utils.CursoRenderer;
 import codigo.programacion.utils.WriteFileUtil;
 
 import java.awt.event.ActionEvent;
@@ -23,34 +38,43 @@ import javafx.scene.control.Tab;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
-
 import javax.swing.*;
 import javax.xml.ws.handler.Handler;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.imageio.ImageIO;
 
 /**
  *
  * @author HugoLuna
  */
-public class Profile extends javax.swing.JFrame  {
+public class Profile extends javax.swing.JFrame implements Go, init {
 
     /**
+     *
      * Creates new form Profile
      */
-   
+    public DefaultListModel<Curso> model;
+    public boolean validateCourse = false;
+
     public Profile(User us) {
         initComponents();
         user = us;
         contentView();
+        initViews();
     }
 
     public Profile() {
         initComponents();
         contentView();
+        initViews();
 
     }
 
@@ -73,13 +97,13 @@ public class Profile extends javax.swing.JFrame  {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         homeBtn = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
+        cursoBtn = new javax.swing.JLabel();
+        docBtn = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         photoProfile = new javax.swing.JLabel();
         userName = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        searchBtn = new javax.swing.JLabel();
+        fieldSearch = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         contentProfile = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -137,15 +161,25 @@ public class Profile extends javax.swing.JFrame  {
         });
         jPanel6.add(homeBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 70, 50));
 
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/play-button.png"))); // NOI18N
-        jLabel6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel6.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 70, 50));
+        cursoBtn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        cursoBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/play-button.png"))); // NOI18N
+        cursoBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        cursoBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cursoBtnMouseClicked(evt);
+            }
+        });
+        jPanel6.add(cursoBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 70, 50));
 
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/docs.png"))); // NOI18N
-        jLabel9.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel6.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 70, 50));
+        docBtn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        docBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/docs.png"))); // NOI18N
+        docBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        docBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                docBtnMouseClicked(evt);
+            }
+        });
+        jPanel6.add(docBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 70, 50));
 
         jPanel5.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 70, 760));
 
@@ -163,12 +197,17 @@ public class Profile extends javax.swing.JFrame  {
         userName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         userName.setText("Usuario");
 
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/search.png"))); // NOI18N
+        searchBtn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        searchBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/search.png"))); // NOI18N
+        searchBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                searchBtnMouseClicked(evt);
+            }
+        });
 
-        jTextField1.setText("Buscar un curso...");
-        jTextField1.setToolTipText("");
-        jTextField1.setSize(new java.awt.Dimension(80, 30));
+        fieldSearch.setText("Buscar un curso...");
+        fieldSearch.setToolTipText("");
+        fieldSearch.setSize(new java.awt.Dimension(80, 30));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Código Programación");
@@ -179,9 +218,9 @@ public class Profile extends javax.swing.JFrame  {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(31, 31, 31)
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 592, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(fieldSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 592, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(45, 45, 45)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 125, Short.MAX_VALUE)
@@ -192,10 +231,10 @@ public class Profile extends javax.swing.JFrame  {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(searchBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTextField1)
+                .addComponent(fieldSearch)
                 .addContainerGap())
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
@@ -347,11 +386,7 @@ public class Profile extends javax.swing.JFrame  {
                 .addGap(74, 74, 74))
         );
 
-        listaCursos.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        jScrollPane1.setBorder(null);
         jScrollPane1.setViewportView(listaCursos);
 
         javax.swing.GroupLayout contentProfileLayout = new javax.swing.GroupLayout(contentProfile);
@@ -395,7 +430,7 @@ public class Profile extends javax.swing.JFrame  {
 
     private void homeBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeBtnMouseClicked
         // TODO add your handling code here:
-        goToHome();
+        goTo("Home");
     }//GEN-LAST:event_homeBtnMouseClicked
 
     private void btnChangeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnChangeMouseClicked
@@ -404,6 +439,29 @@ public class Profile extends javax.swing.JFrame  {
         validateDataToSave();
 
     }//GEN-LAST:event_btnChangeMouseClicked
+
+    private void cursoBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cursoBtnMouseClicked
+        // TODO add your handling code here:
+        goTo("Cursos");
+    }//GEN-LAST:event_cursoBtnMouseClicked
+
+    private void docBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_docBtnMouseClicked
+        // TODO add your handling code here:
+        goTo("Doc");
+    }//GEN-LAST:event_docBtnMouseClicked
+
+    private void searchBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchBtnMouseClicked
+        // TODO add your handling code here:
+         // TODO add your handling code here:
+        String text = fieldSearch.getText().toString();
+        if (!text.isEmpty() && !text.equals("Buscar un curso...")) {
+            
+            dispose();
+            Search s = new Search(user,text);
+            s.setVisible(true);
+            
+        }
+    }//GEN-LAST:event_searchBtnMouseClicked
 
     private void validateDataToSave() {
         try {
@@ -420,7 +478,7 @@ public class Profile extends javax.swing.JFrame  {
             if (!nombre.isEmpty() && !nombre.equals(user.getNombre())) {
                 query = "UPDATE users SET nombre = '" + nombre + "' WHERE id = '" + user.getId() + "'";
 
-                data = user.getId()+"\n"+nombre + "\n" + user.getApellidos() + "\n" + user.getUsuario() + "\n" + user.getCorreo() + "\n" + user.getPhoto() + "\n" + user.getPhotoPortada() + "\n" + user.getRol() + "\n" + user.getCreated_at();
+                data = user.getId() + "\n" + nombre + "\n" + user.getApellidos() + "\n" + user.getUsuario() + "\n" + user.getCorreo() + "\n" + user.getPhoto() + "\n" + user.getPhotoPortada() + "\n" + user.getRol() + "\n" + user.getCreated_at();
                 user.setNombre(nombre);
                 //String data = id+"\n"+nombre+"\n"+apellidos+"\n"+usuario+"\n"+correo+"\n"+photo+"\n"+photoPortada+"\n"+rol+"\n"+created_at;
             }
@@ -428,7 +486,7 @@ public class Profile extends javax.swing.JFrame  {
             if (!apellidos.isEmpty() && !apellidos.equals(user.getApellidos())) {
                 query = "UPDATE users SET apellidos = '" + apellidos + "' WHERE id = '" + user.getId() + "'";
 
-                data = user.getId()+"\n"+user.getNombre() + "\n" + apellidos + "\n" + user.getUsuario() + "\n" + user.getCorreo() + "\n" + user.getPhoto() + "\n" + user.getPhotoPortada() + "\n" + user.getRol() + "\n" + user.getCreated_at();
+                data = user.getId() + "\n" + user.getNombre() + "\n" + apellidos + "\n" + user.getUsuario() + "\n" + user.getCorreo() + "\n" + user.getPhoto() + "\n" + user.getPhotoPortada() + "\n" + user.getRol() + "\n" + user.getCreated_at();
                 user.setApellidos(apellidos);
 
             }
@@ -436,7 +494,7 @@ public class Profile extends javax.swing.JFrame  {
             if (!correo.isEmpty() && !correo.equals(user.getCorreo())) {
                 query = "UPDATE users SET correo = '" + correo + "' WHERE id = '" + user.getId() + "'";
 
-                data = user.getId()+"\n"+user.getNombre() + "\n" + user.getApellidos() + "\n" + user.getUsuario() + "\n" + correo + "\n" + user.getPhoto() + "\n" + user.getPhotoPortada() + "\n" + user.getRol() + "\n" + user.getCreated_at();
+                data = user.getId() + "\n" + user.getNombre() + "\n" + user.getApellidos() + "\n" + user.getUsuario() + "\n" + correo + "\n" + user.getPhoto() + "\n" + user.getPhotoPortada() + "\n" + user.getRol() + "\n" + user.getCreated_at();
                 user.setCorreo(correo);
             }
 
@@ -474,15 +532,9 @@ public class Profile extends javax.swing.JFrame  {
 
     }
 
-    public void goToHome() {
-        Home home = new Home(user);
-        this.dispose();
-        home.setVisible(true);
-
-    }
 
     public void contentView() {
-        
+
         userName.setText(user.getUsuario());
         nameUserLabel.setText(user.getNombre() + " " + user.getApellidos());
         nombreField.setText(user.getNombre());
@@ -509,17 +561,17 @@ public class Profile extends javax.swing.JFrame  {
 
         labelDateNow.setText(fecha2);
 
-        
-       
     }
 
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField apellidosField;
     private javax.swing.JButton btnChange;
     private javax.swing.JPanel contentProfile;
+    private javax.swing.JLabel cursoBtn;
+    private javax.swing.JLabel docBtn;
     private javax.swing.JTextField emailField;
+    private javax.swing.JTextField fieldSearch;
     private javax.swing.JLabel homeBtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -530,23 +582,114 @@ public class Profile extends javax.swing.JFrame  {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel labelDate;
     private javax.swing.JLabel labelDateNow;
-    private javax.swing.JList<String> listaCursos;
+    private javax.swing.JList<Curso> listaCursos;
     private javax.swing.JLabel nameUserLabel;
     private javax.swing.JTextField nombreField;
     private javax.swing.JLabel photoProfile;
+    private javax.swing.JLabel searchBtn;
     private javax.swing.JLabel userName;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void goTo() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void goTo(String screen) {
+        this.dispose();
+        switch (screen) {
+            case "Home":
+                Home home = new Home(user);
+                home.setVisible(true);
+                break;
+            case "Admin":
+                Admin admin = new Admin(user);
+                admin.setVisible(true);
+                break;
+            case "Cursos":
+
+                AllCourses ac = new AllCourses(user);
+                ac.setVisible(true);
+                break;
+            case "Doc":
+                Documentacion d = new Documentacion(user);
+                d.setVisible(true);
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void initViews() {
+
+        model = new DefaultListModel<>();
+
+        try {
+
+            Connection bd = DB.getConection();
+            Statement state = bd.createStatement();
+
+            String consulta = "SELECT * FROM (curso INNER JOIN inscrito ON curso.id = inscrito.id_usuario)";
+            ResultSet resultset = state.executeQuery(consulta);
+
+            if (resultset != null) {
+
+                while (resultset.next()) {
+                    // get fields
+                    String id = resultset.getString("curso.id");
+                    String nombre = resultset.getString("curso.nombre");
+                    String descripcion = resultset.getString("curso.descripcion");
+                    String autor = resultset.getString("curso.autor");
+                    String estudiantes = resultset.getString("curso.estudiantes");
+                    String img = resultset.getString("curso.img");
+                    String created_at = resultset.getString("curso.created_at");
+
+                    model.addElement(new Curso(id, nombre, descripcion, autor, estudiantes, img, created_at));
+
+                }
+
+            }
+
+        } catch (Exception e) {
+            System.err.println("Error al traer los datos para la lista");
+        }
+
+        MouseListener mouseListener = new MouseAdapter() {
+            public void mouseClicked(MouseEvent mouseEvent) {
+                listaCursos = (JList) mouseEvent.getSource();
+
+                if (mouseEvent.getClickCount() == 1) {
+                    int index = listaCursos.locationToIndex(mouseEvent.getPoint());
+                    //System.out.println(model.get(index).getNombre());
+                }
+
+                if (mouseEvent.getClickCount() == 2) {
+                    int index = listaCursos.locationToIndex(mouseEvent.getPoint());
+                    System.out.println(model.get(index).getNombre());
+                    String id_course = model.get(index).getId();
+                    dispose();
+                    CursoView cv = new CursoView(user, id_course);
+                    cv.setVisible(true);
+
+                }
+            }
+        };
+        listaCursos.addMouseListener(mouseListener);
+
+        // create JList with model
+        listaCursos.setModel(model);
+        // set cell renderer
+        listaCursos.setCellRenderer(new CursoRenderer());
+
+    }
 
 }

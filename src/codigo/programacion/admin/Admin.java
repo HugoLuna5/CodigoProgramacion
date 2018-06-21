@@ -5,7 +5,10 @@
  */
 package codigo.programacion.admin;
 
+import codigo.programacion.Documentacion.Documentacion;
+import codigo.programacion.Search.Search;
 import codigo.programacion.conexionDB.DB;
+import codigo.programacion.curso.AllCourses;
 import codigo.programacion.curso.CursoView;
 import codigo.programacion.home.Home;
 import codigo.programacion.interfaces.Go;
@@ -129,13 +132,13 @@ public class Admin extends javax.swing.JFrame implements Go {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         Home = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
+        cursosBtn = new javax.swing.JLabel();
+        docBtn = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         photoProfile = new javax.swing.JLabel();
         userName = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        searchBtn = new javax.swing.JLabel();
+        fieldSearch = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -198,15 +201,25 @@ public class Admin extends javax.swing.JFrame implements Go {
         });
         jPanel10.add(Home, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 70, 50));
 
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/play-button.png"))); // NOI18N
-        jLabel8.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel10.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 70, 50));
+        cursosBtn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        cursosBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/play-button.png"))); // NOI18N
+        cursosBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        cursosBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cursosBtnMouseClicked(evt);
+            }
+        });
+        jPanel10.add(cursosBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 70, 50));
 
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/docs.png"))); // NOI18N
-        jLabel9.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel10.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 70, 50));
+        docBtn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        docBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/docs.png"))); // NOI18N
+        docBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        docBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                docBtnMouseClicked(evt);
+            }
+        });
+        jPanel10.add(docBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 70, 50));
 
         jPanel9.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 70, 760));
 
@@ -234,12 +247,17 @@ public class Admin extends javax.swing.JFrame implements Go {
             }
         });
 
-        jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/search.png"))); // NOI18N
+        searchBtn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        searchBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/search.png"))); // NOI18N
+        searchBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                searchBtnMouseClicked(evt);
+            }
+        });
 
-        jTextField1.setText("Buscar un curso...");
-        jTextField1.setToolTipText("");
-        jTextField1.setSize(new java.awt.Dimension(80, 30));
+        fieldSearch.setText("Buscar un curso...");
+        fieldSearch.setToolTipText("");
+        fieldSearch.setSize(new java.awt.Dimension(80, 30));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Código Programación");
@@ -250,9 +268,9 @@ public class Admin extends javax.swing.JFrame implements Go {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(31, 31, 31)
-                .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 592, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(fieldSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 592, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(45, 45, 45)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 125, Short.MAX_VALUE)
@@ -263,10 +281,10 @@ public class Admin extends javax.swing.JFrame implements Go {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(searchBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTextField1)
+                .addComponent(fieldSearch)
                 .addContainerGap())
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
@@ -352,6 +370,8 @@ public class Admin extends javax.swing.JFrame implements Go {
         jPanel9.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 100, 400, 410));
 
         containerCursos.setBackground(new java.awt.Color(255, 255, 255));
+
+        jScrollPane2.setBorder(null);
 
         List.setSelectionBackground(new java.awt.Color(0, 102, 204));
         List.setSelectionForeground(new java.awt.Color(0, 102, 204));
@@ -480,22 +500,21 @@ public class Admin extends javax.swing.JFrame implements Go {
             public void actionPerformed(ActionEvent ae) {
                 //uploadFileToServer(fileForImageCourse);
 
-                EncryptingData ecData = new EncryptingData();
-
-                String name = ecData.MD5(fileForImageCourse.getName() + "lunainc" + fileForImageCourse.getPath());
-
-                Admin ad = new Admin(user);
-
-                /**
-                 * generar nombre
-                 */
-                File parent = fileForImageCourse.getParentFile();
-                String filename = name + fileForImageCourse.getName().toLowerCase();
-                File doo = new File(parent, filename);
-                fileForImageCourse.renameTo(doo);
-                File newfile = doo;
-
                 try {
+                    EncryptingData ecData = new EncryptingData();
+
+                    String name = ecData.MD5(fileForImageCourse.getName() + "lunainc" + fileForImageCourse.getPath());
+
+                    Admin ad = new Admin(user);
+
+                    /**
+                     * generar nombre
+                     */
+                    File parent = fileForImageCourse.getParentFile();
+                    String filename = name + fileForImageCourse.getName().toLowerCase();
+                    File doo = new File(parent, filename);
+                    fileForImageCourse.renameTo(doo);
+                    File newfile = doo;
 
                     ad.upload(newfile.getPath().toString(), newfile.getName(), true);
 
@@ -539,7 +558,7 @@ public class Admin extends javax.swing.JFrame implements Go {
 
             System.out.println(selectedFile.getAbsolutePath());
 
-            selectFile.setText("Seleccionaste el siguiente archivo: " + selectedFile.getName());
+            selectFile.setText("Seleccionaste: " + selectedFile.getName());
         }
     }//GEN-LAST:event_selectFileMouseClicked
 
@@ -585,6 +604,12 @@ public class Admin extends javax.swing.JFrame implements Go {
                     JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Se agrego correctamente el contenido al curso: " + model.get(selectedIndex).getNombre(), "¡Felicidades!", JOptionPane.INFORMATION_MESSAGE);
 
                     conDB.close();//cerrando conexion con la base de datos
+                    List.removeAll();
+                    model.removeAllElements();
+
+                    createList();
+
+                    goTo("Admin");
 
                 } catch (SQLException err) {
                     System.err.println("Error sql: " + err.getMessage());
@@ -633,8 +658,7 @@ public class Admin extends javax.swing.JFrame implements Go {
 
     private void viewCourseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewCourseMouseClicked
         // TODO add your handling code here:
-        
-        
+
         int selectedIndex = List.getSelectedIndex();
 
         if (selectedIndex != -1) {//validate index list 
@@ -644,8 +668,30 @@ public class Admin extends javax.swing.JFrame implements Go {
             CursoView cv = new CursoView(user, id_course);
             cv.setVisible(true);
         }
-        
+
     }//GEN-LAST:event_viewCourseMouseClicked
+
+    private void cursosBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cursosBtnMouseClicked
+        // TODO add your handling code here:
+        goTo("Curso");
+    }//GEN-LAST:event_cursosBtnMouseClicked
+
+    private void docBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_docBtnMouseClicked
+        // TODO add your handling code here:
+        goTo("Doc");
+    }//GEN-LAST:event_docBtnMouseClicked
+
+    private void searchBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchBtnMouseClicked
+        // TODO add your handling code here:
+         String text = fieldSearch.getText().toString();
+        if (!text.isEmpty() && !text.equals("Buscar un curso...")) {
+            
+            dispose();
+            Search s = new Search(user,text);
+            s.setVisible(true);
+            
+        }
+    }//GEN-LAST:event_searchBtnMouseClicked
 
     /**
      * Method for register dat in DB
@@ -752,23 +798,23 @@ public class Admin extends javax.swing.JFrame implements Go {
     private javax.swing.JButton btnSubmitCourse;
     private java.awt.Button button1;
     private javax.swing.JPanel containerCursos;
+    private javax.swing.JLabel cursosBtn;
     private java.awt.Button deleteCourse;
     private javax.swing.JTextArea descCourse;
+    private javax.swing.JLabel docBtn;
     private javax.swing.JTextArea fieldDescripcion;
     private javax.swing.JTextField fieldName;
+    private javax.swing.JTextField fieldSearch;
     private javax.swing.JTextField fieldUrl;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel3;
@@ -776,9 +822,9 @@ public class Admin extends javax.swing.JFrame implements Go {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField nameCourse;
     private javax.swing.JLabel photoProfile;
+    private javax.swing.JLabel searchBtn;
     private javax.swing.JButton selectFile;
     private javax.swing.JLabel userName;
     private java.awt.Button viewCourse;
@@ -786,11 +832,23 @@ public class Admin extends javax.swing.JFrame implements Go {
 
     @Override
     public void goTo(String screen) {
+        this.dispose();
         switch (screen) {
             case "Home":
                 Home home = new Home(user);
-                this.dispose();
                 home.setVisible(true);
+                break;
+            case "Admin":
+                Admin admin = new Admin(user);
+                admin.setVisible(true);
+                break;
+            case "Curso":
+                AllCourses ac = new AllCourses(user);
+                ac.setVisible(true);
+                break;
+            case "Doc":
+                Documentacion d = new Documentacion(user);
+                d.setVisible(true);
                 break;
             default:
                 break;

@@ -5,7 +5,10 @@
  */
 package codigo.programacion.home;
 
+import codigo.programacion.Documentacion.Documentacion;
+import codigo.programacion.Search.Search;
 import codigo.programacion.admin.Admin;
+import codigo.programacion.curso.AllCourses;
 import codigo.programacion.interfaces.Go;
 import codigo.programacion.login.login;
 import codigo.programacion.model.User;
@@ -62,29 +65,29 @@ public class Home extends javax.swing.JFrame implements Go {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
+        goCourse = new javax.swing.JLabel();
+        docBtnMenu = new javax.swing.JLabel();
         containerCont = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        btnBackend = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        btnFrontend = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnAndroid = new javax.swing.JButton();
         bannerHome = new javax.swing.JPanel();
         jInternalFrame1 = new javax.swing.JInternalFrame();
         jLabel2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         photoProfile = new javax.swing.JLabel();
         userName = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        searchBtn = new javax.swing.JLabel();
+        fieldSearch = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -120,15 +123,25 @@ public class Home extends javax.swing.JFrame implements Go {
         jLabel5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jPanel6.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 70, 50));
 
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/play-button.png"))); // NOI18N
-        jLabel6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel6.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 70, 50));
+        goCourse.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        goCourse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/play-button.png"))); // NOI18N
+        goCourse.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        goCourse.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                goCourseMouseClicked(evt);
+            }
+        });
+        jPanel6.add(goCourse, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 70, 50));
 
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/docs.png"))); // NOI18N
-        jLabel9.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel6.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 70, 50));
+        docBtnMenu.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        docBtnMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/docs.png"))); // NOI18N
+        docBtnMenu.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        docBtnMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                docBtnMenuMouseClicked(evt);
+            }
+        });
+        jPanel6.add(docBtnMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 70, 50));
 
         jPanel5.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 70, 760));
 
@@ -147,7 +160,8 @@ public class Home extends javax.swing.JFrame implements Go {
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText("Cursos De Backend");
 
-        jButton2.setText("Revisar");
+        btnBackend.setBackground(new java.awt.Color(255, 255, 255));
+        btnBackend.setText("Revisar");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -157,7 +171,7 @@ public class Home extends javax.swing.JFrame implements Go {
                 .addGap(140, 140, 140)
                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
-                .addComponent(jButton2))
+                .addComponent(btnBackend))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -172,7 +186,7 @@ public class Home extends javax.swing.JFrame implements Go {
                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton2)))
+                        .addComponent(btnBackend)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(16, 16, 16))
@@ -191,7 +205,8 @@ public class Home extends javax.swing.JFrame implements Go {
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel12.setText("Cursos De Frontend");
 
-        jButton3.setText("Revisar");
+        btnFrontend.setBackground(new java.awt.Color(255, 255, 255));
+        btnFrontend.setText("Revisar");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -201,7 +216,7 @@ public class Home extends javax.swing.JFrame implements Go {
                 .addGap(140, 140, 140)
                 .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3))
+                .addComponent(btnFrontend))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(54, Short.MAX_VALUE)
                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -216,7 +231,7 @@ public class Home extends javax.swing.JFrame implements Go {
                         .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton3)))
+                        .addComponent(btnFrontend)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(16, 16, 16))
@@ -235,7 +250,8 @@ public class Home extends javax.swing.JFrame implements Go {
         jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel14.setText("Curso de programación para android");
 
-        jButton1.setText("Revisar");
+        btnAndroid.setBackground(new java.awt.Color(255, 255, 255));
+        btnAndroid.setText("Revisar");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -245,7 +261,7 @@ public class Home extends javax.swing.JFrame implements Go {
                 .addGap(140, 140, 140)
                 .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1))
+                .addComponent(btnAndroid))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap(54, Short.MAX_VALUE)
                 .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -260,7 +276,7 @@ public class Home extends javax.swing.JFrame implements Go {
                         .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton1)))
+                        .addComponent(btnAndroid)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(16, 16, 16))
@@ -339,12 +355,17 @@ public class Home extends javax.swing.JFrame implements Go {
             }
         });
 
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/search.png"))); // NOI18N
+        searchBtn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        searchBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/search.png"))); // NOI18N
+        searchBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                searchBtnMouseClicked(evt);
+            }
+        });
 
-        jTextField1.setText("Buscar un curso...");
-        jTextField1.setToolTipText("");
-        jTextField1.setSize(new java.awt.Dimension(80, 30));
+        fieldSearch.setText("Buscar un curso...");
+        fieldSearch.setToolTipText("");
+        fieldSearch.setSize(new java.awt.Dimension(80, 30));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Código Programación");
@@ -355,9 +376,9 @@ public class Home extends javax.swing.JFrame implements Go {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(31, 31, 31)
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 592, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(fieldSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 592, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(45, 45, 45)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 125, Short.MAX_VALUE)
@@ -368,10 +389,10 @@ public class Home extends javax.swing.JFrame implements Go {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(searchBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTextField1)
+                .addComponent(fieldSearch)
                 .addContainerGap())
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
@@ -423,46 +444,70 @@ public class Home extends javax.swing.JFrame implements Go {
 
     private void userNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userNameMouseClicked
         // TODO add your handling code here:
-        
+
         goTo("Admin");
     }//GEN-LAST:event_userNameMouseClicked
 
-    
-    
+    private void goCourseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_goCourseMouseClicked
+        // TODO add your handling code here:
+        goTo("Cursos");
+    }//GEN-LAST:event_goCourseMouseClicked
+
+    private void searchBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchBtnMouseClicked
+        // TODO add your handling code here:
+        String text = fieldSearch.getText().toString();
+        if (!text.isEmpty() && !text.equals("Buscar un curso...")) {
+            
+            dispose();
+            Search s = new Search(user,text);
+            s.setVisible(true);
+            
+        }
+    }//GEN-LAST:event_searchBtnMouseClicked
+
+    private void docBtnMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_docBtnMenuMouseClicked
+        // TODO add your handling code here:
+        goTo("Doc");
+    }//GEN-LAST:event_docBtnMenuMouseClicked
+
     @Override
     public void goTo(String screen) {
+        this.dispose();
         switch (screen) {
             case "Home":
                 Home home = new Home(user);
-                this.dispose();
                 home.setVisible(true);
                 break;
             case "Admin":
-                 Admin admin = new Admin(user);
-        this.dispose();
-        admin.setVisible(true);
+                Admin admin = new Admin(user);
+                admin.setVisible(true);
+                break;
+            case "Cursos":
+
+                AllCourses ac = new AllCourses(user);
+                ac.setVisible(true);
+                break;
+            case "Doc":
+                Documentacion d = new Documentacion(user);
+                d.setVisible(true);
                 break;
             default:
                 break;
         }
     }
-    
+
     @Override
     public void goTo() {
-        
+
     }
-    
-    
-    
-    
-    public void goToProfile(){
+
+    public void goToProfile() {
         Profile profile = new Profile(user);
         this.dispose();
         profile.setVisible(true);
-        
-        
+
     }
-    
+
     public void closeSession() {
         try {
 
@@ -488,15 +533,7 @@ public class Home extends javax.swing.JFrame implements Go {
 
         userName.setText(user.getUsuario());
 
-                
-        
-       
-        
-
-        
-        
     }
-
 
     public void maximize(Frame frame) {
         int state = frame.getExtendedState();
@@ -511,10 +548,13 @@ public class Home extends javax.swing.JFrame implements Go {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel bannerHome;
+    private javax.swing.JButton btnAndroid;
+    private javax.swing.JButton btnBackend;
+    private javax.swing.JButton btnFrontend;
     private javax.swing.JPanel containerCont;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JLabel docBtnMenu;
+    private javax.swing.JTextField fieldSearch;
+    private javax.swing.JLabel goCourse;
     private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -526,18 +566,15 @@ public class Home extends javax.swing.JFrame implements Go {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel photoProfile;
+    private javax.swing.JLabel searchBtn;
     private javax.swing.JLabel userName;
     // End of variables declaration//GEN-END:variables
 }

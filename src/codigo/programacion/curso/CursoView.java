@@ -5,6 +5,9 @@
  */
 package codigo.programacion.curso;
 
+import codigo.programacion.Documentacion.Documentacion;
+import codigo.programacion.Search.Search;
+import codigo.programacion.admin.Admin;
 import codigo.programacion.conexionDB.DB;
 import codigo.programacion.home.Home;
 import codigo.programacion.interfaces.Go;
@@ -15,6 +18,8 @@ import codigo.programacion.model.User;
 import codigo.programacion.utils.CircleButton;
 import codigo.programacion.utils.ContenidoRenderer;
 import codigo.programacion.utils.CursoRenderer;
+import com.sun.javafx.application.PlatformImpl;
+import java.awt.BorderLayout;
 import java.awt.Image;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -24,15 +29,46 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.concurrent.CountDownLatch;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
+import com.sun.javafx.application.PlatformImpl;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+import javafx.stage.Stage;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -59,30 +95,30 @@ public class CursoView extends javax.swing.JFrame implements Go, init {
         System.out.println("ID Curso: " + id_course);
         validateExist();
         initViews();
-
+        
     }
-
+    
     public void validateExist() {
         try {
             Connection conDB = DB.getConection();
             Statement state = conDB.createStatement();
-
+            
             String query = "SELECT * FROM inscrito WHERE id_usuario = '" + user.getId() + "' AND id_curso = '" + id_course + "'";
-
+            
             ResultSet rs = state.executeQuery(query);
-
+            
             if (!rs.first()) {
                 validateCourse = true;
                 actionBtn.setIcon(new ImageIcon(getClass().getResource("/imagenes/add.png")));
-
+                
             } else {
                 validateCourse = false;
                 actionBtn.setIcon(new ImageIcon(getClass().getResource("/imagenes/play-button.png")));
-
+                
             }
-
+            
         } catch (Exception e) {
-
+            
         }
     }
 
@@ -100,13 +136,13 @@ public class CursoView extends javax.swing.JFrame implements Go, init {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         Home = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
+        cursoBtn = new javax.swing.JLabel();
+        docBtn = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         photoProfile = new javax.swing.JLabel();
         userName = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        searchBtn = new javax.swing.JLabel();
+        fieldSearch = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         containerCursos = new javax.swing.JPanel();
         imageCourse = new javax.swing.JLabel();
@@ -161,15 +197,25 @@ public class CursoView extends javax.swing.JFrame implements Go, init {
         });
         jPanel10.add(Home, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 70, 50));
 
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/play-button.png"))); // NOI18N
-        jLabel8.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel10.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 70, 50));
+        cursoBtn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        cursoBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/play-button.png"))); // NOI18N
+        cursoBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        cursoBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cursoBtnMouseClicked(evt);
+            }
+        });
+        jPanel10.add(cursoBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 70, 50));
 
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/docs.png"))); // NOI18N
-        jLabel9.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel10.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 70, 50));
+        docBtn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        docBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/docs.png"))); // NOI18N
+        docBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        docBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                docBtnMouseClicked(evt);
+            }
+        });
+        jPanel10.add(docBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 70, 50));
 
         jPanel9.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 70, 760));
 
@@ -197,12 +243,17 @@ public class CursoView extends javax.swing.JFrame implements Go, init {
             }
         });
 
-        jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/search.png"))); // NOI18N
+        searchBtn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        searchBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/codigo/programacion/home/search.png"))); // NOI18N
+        searchBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                searchBtnMouseClicked(evt);
+            }
+        });
 
-        jTextField1.setText("Buscar un curso...");
-        jTextField1.setToolTipText("");
-        jTextField1.setSize(new java.awt.Dimension(80, 30));
+        fieldSearch.setText("Buscar un curso...");
+        fieldSearch.setToolTipText("");
+        fieldSearch.setSize(new java.awt.Dimension(80, 30));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Código Programación");
@@ -213,9 +264,9 @@ public class CursoView extends javax.swing.JFrame implements Go, init {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(31, 31, 31)
-                .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 592, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(fieldSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 592, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(45, 45, 45)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 125, Short.MAX_VALUE)
@@ -226,10 +277,10 @@ public class CursoView extends javax.swing.JFrame implements Go, init {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(searchBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTextField1)
+                .addComponent(fieldSearch)
                 .addContainerGap())
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
@@ -281,6 +332,8 @@ public class CursoView extends javax.swing.JFrame implements Go, init {
         autor.setForeground(new java.awt.Color(255, 255, 255));
         autor.setText("Autor: Hugo Dario Luna Cruz");
 
+        jScrollPane2.setBorder(null);
+
         descripcionCurso.setBackground(new java.awt.Color(21, 150, 135));
         descripcionCurso.setColumns(20);
         descripcionCurso.setForeground(new java.awt.Color(255, 255, 255));
@@ -309,7 +362,7 @@ public class CursoView extends javax.swing.JFrame implements Go, init {
                     .addComponent(actionBtn)
                     .addComponent(autor)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(232, Short.MAX_VALUE))
+                .addContainerGap(236, Short.MAX_VALUE))
             .addGroup(containerCursosLayout.createSequentialGroup()
                 .addGap(77, 77, 77)
                 .addComponent(imageCourse)
@@ -386,41 +439,76 @@ public class CursoView extends javax.swing.JFrame implements Go, init {
 
             try {
                 Connection conDB = DB.getConection();
-
+                
                 String queryInsert = " INSERT INTO inscrito (id_curso, id_usuario)"
                         + " values (?, ?)";
-
+                
                 PreparedStatement ps = conDB.prepareStatement(queryInsert);
-
+                
                 ps.setString(1, id_course);
                 ps.setString(2, String.valueOf(user.getId()));
                 ps.execute();
-
+                
                 conDB.close();
-
+                
                 JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Te haz inscrito a este curso", "Felicidades", JOptionPane.INFORMATION_MESSAGE);
                 validateCourse = true;
-
+                
                 validateExist();
-
+                
             } catch (SQLException ex) {
                 System.err.println("Error sql cursoview: " + ex.getMessage());
             }
-
+            
         } else {//si esta reistrado
             System.out.println("Click");
-
+            
             int selectedIndex = listContentCourse.getSelectedIndex();
-
+            
             if (selectedIndex != -1) {//validate index list 
                 id_contenido = model.get(selectedIndex).getId();
-                CursoD doo = new CursoD();
-
+                System.out.println(model.get(selectedIndex).getNombre());
+                System.out.println(id_contenido);
+                String urlD = model.get(selectedIndex).url;
+                this.dispose();
+                
+                CursoDetail cd = new CursoDetail(Integer.parseInt(id_course), id_contenido, user, urlD);
+                cd.setVisible(true);
+                
             }
-        }
 
+            /*
+            
+            
+            
+             */
+        }
+        
 
     }//GEN-LAST:event_actionBtnMouseClicked
+
+    private void cursoBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cursoBtnMouseClicked
+        // TODO add your handling code here:
+        goTo("Cursos");
+    }//GEN-LAST:event_cursoBtnMouseClicked
+
+    private void docBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_docBtnMouseClicked
+        // TODO add your handling code here:
+        goTo("Doc");
+    }//GEN-LAST:event_docBtnMouseClicked
+
+    private void searchBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchBtnMouseClicked
+        // TODO add your handling code here:
+         // TODO add your handling code here:
+        String text = fieldSearch.getText().toString();
+        if (!text.isEmpty() && !text.equals("Buscar un curso...")) {
+            
+            dispose();
+            Search s = new Search(user,text);
+            s.setVisible(true);
+            
+        }
+    }//GEN-LAST:event_searchBtnMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -429,26 +517,26 @@ public class CursoView extends javax.swing.JFrame implements Go, init {
     private javax.swing.JLabel autor;
     private java.awt.Button button1;
     private javax.swing.JPanel containerCursos;
+    private javax.swing.JLabel cursoBtn;
     private javax.swing.JTextArea descripcionCurso;
+    private javax.swing.JLabel docBtn;
+    private javax.swing.JTextField fieldSearch;
     private javax.swing.JLabel imageCourse;
     private javax.swing.JButton jButton1;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
     public javax.swing.JList listContentCourse;
     private java.awt.Label nameCourse;
     private javax.swing.JLabel photoProfile;
+    private javax.swing.JLabel searchBtn;
     private javax.swing.JLabel userName;
     // End of variables declaration//GEN-END:variables
 
@@ -456,37 +544,49 @@ public class CursoView extends javax.swing.JFrame implements Go, init {
     public void goTo() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
     @Override
     public void goTo(String screen) {
-
+        
+        this.dispose();
         switch (screen) {
             case "Home":
-                this.dispose();
-                Home h = new Home(user);
-                h.setVisible(true);
+                Home home = new Home(user);
+                home.setVisible(true);
                 break;
-
+            case "Admin":
+                Admin admin = new Admin(user);
+                admin.setVisible(true);
+                break;
+            case "Cursos":
+                
+                AllCourses ac = new AllCourses(user);
+                ac.setVisible(true);
+                break;
+            case "Doc":
+                Documentacion d = new Documentacion(user);
+                d.setVisible(true);
+                break;
             default:
-                System.out.println("No se selecciono nada");
                 break;
         }
-
+        
     }
-
+    
     @Override
     public void initViews() {
+        userName.setText(user.getUsuario());
         model = new DefaultListModel<>();
         try {
             Connection conDB = DB.getConection();
             Statement state = conDB.createStatement();
             Statement state2 = conDB.createStatement();
-
+            
             String consulta = "SELECT * FROM contenido WHERE id_curso = '" + id_course + "' ORDER BY id ASC";
             ResultSet resultset = state.executeQuery(consulta);
-
+            
             if (resultset != null) {
-
+                
                 while (resultset.next()) {
                     // get fields
                     Integer id = resultset.getInt("id");
@@ -496,41 +596,41 @@ public class CursoView extends javax.swing.JFrame implements Go, init {
                     String descripcion = resultset.getString("descripcion");
                     String created_at = resultset.getString("created_at");
                     String updated_at = resultset.getString("updated_at");
-
+                    
                     model.addElement(new Contenido(id, id_course, nombre, url, descripcion, created_at, updated_at));
-
+                    
                 }
-
+                
             }
-
+            
             String con = "SELECT * FROM curso WHERE id = '" + id_course + "'";
             ResultSet rs = state2.executeQuery(con);
-
+            
             if (rs != null) {
                 rs.next();
-
+                
                 nameCourse.setText(rs.getString("nombre"));
-
+                
                 try {
                     Image image = null;
                     URL url = new URL("http://lunainc.com.mx/cursos/" + rs.getString("img"));
                     image = ImageIO.read(url);
                     imageCourse.setIcon(new ImageIcon(image));
                 } catch (Exception e) {
-                    System.err.println("Error al descargar la imagen: "+e.getMessage());
-
+                    System.err.println("Error al descargar la imagen: " + e.getMessage());
+                    
                 }
-
+                
                 descripcionCurso.setText(rs.getString("descripcion"));
-
+                
                 autor.setText("Autor: " + rs.getString("autor"));
-
+                
             }
-
+            
         } catch (SQLException ex) {
-
+            
             System.out.println("Error sql: " + ex.getMessage());
-
+            
         }
 
         // create JList with model
@@ -541,6 +641,7 @@ public class CursoView extends javax.swing.JFrame implements Go, init {
         if (selectedIndex != -1) {
             id_contenido = model.get(selectedIndex).getId();
         }
+        
     }
-
+    
 }

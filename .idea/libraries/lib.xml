@@ -1,8 +1,15 @@
 <component name="libraryTable">
   <library name="lib">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/KGradientPanel.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/mysql-connector-java-5.0.8-bin-g.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/lib/AbsoluteLayout.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/lib/DJNativeSwing.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/lib/vlcj-3.7.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/lib/mysql-connector-java-5.1.46-bin.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/lib/KGradientPanel.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/lib/commons-net-3.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/lib/DJNativeSwing-SWTDemo.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/lib/DJNativeSwing-SWT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/lib/jfoenix-8.0.4.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
