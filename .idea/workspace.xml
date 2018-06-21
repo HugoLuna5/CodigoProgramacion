@@ -2,22 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f0717ad6-c089-484c-811c-a7b6bae7dc8f" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib.xml" afterPath="$PROJECT_DIR$/.idea/libraries/lib.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterPath="" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Codigo_Programacion.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/lib1.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/codigoProgramacion.uml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/nbproject/private/config.properties" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/nbproject/private/private.properties" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/nbproject/private/private.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/src/codigo/programacion/Documentacion/Documentacion.form" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/src/codigo/programacion/Documentacion/Documentacion.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/src/codigo/programacion/Search/Search.form" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/src/codigo/programacion/Search/Search.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/src/codigo/programacion/curso/AllCourses.form" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/src/codigo/programacion/curso/AllCourses.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/src/codigo/programacion/utils/DocRenderer.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/src/codigo/programacion/utils/Sesion.java" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/Codigo Programacion.iml" afterPath="$PROJECT_DIR$/Codigo Programacion.iml" />
-      <change beforePath="$PROJECT_DIR$/src/codigo/programacion/admin/Admin.form" afterPath="$PROJECT_DIR$/src/codigo/programacion/admin/Admin.form" />
-      <change beforePath="$PROJECT_DIR$/src/codigo/programacion/admin/Admin.java" afterPath="$PROJECT_DIR$/src/codigo/programacion/admin/Admin.java" />
-      <change beforePath="$PROJECT_DIR$/src/codigo/programacion/curso/CursoD.java" afterPath="$PROJECT_DIR$/src/codigo/programacion/curso/CursoD.java" />
-      <change beforePath="$PROJECT_DIR$/src/codigo/programacion/curso/CursoDetail.form" afterPath="$PROJECT_DIR$/src/codigo/programacion/curso/CursoDetail.form" />
-      <change beforePath="$PROJECT_DIR$/src/codigo/programacion/curso/CursoDetail.java" afterPath="$PROJECT_DIR$/src/codigo/programacion/curso/CursoDetail.java" />
-      <change beforePath="$PROJECT_DIR$/src/codigo/programacion/curso/CursoView.form" afterPath="$PROJECT_DIR$/src/codigo/programacion/curso/CursoView.form" />
-      <change beforePath="$PROJECT_DIR$/src/codigo/programacion/curso/CursoView.java" afterPath="$PROJECT_DIR$/src/codigo/programacion/curso/CursoView.java" />
-      <change beforePath="$PROJECT_DIR$/src/codigo/programacion/home/Home.form" afterPath="$PROJECT_DIR$/src/codigo/programacion/home/Home.form" />
-      <change beforePath="$PROJECT_DIR$/src/codigo/programacion/home/Home.java" afterPath="$PROJECT_DIR$/src/codigo/programacion/home/Home.java" />
-      <change beforePath="$PROJECT_DIR$/src/codigo/programacion/login/login.java" afterPath="$PROJECT_DIR$/src/codigo/programacion/login/login.java" />
-      <change beforePath="$PROJECT_DIR$/src/codigo/programacion/profile/Profile.form" afterPath="$PROJECT_DIR$/src/codigo/programacion/profile/Profile.form" />
-      <change beforePath="$PROJECT_DIR$/src/codigo/programacion/profile/Profile.java" afterPath="$PROJECT_DIR$/src/codigo/programacion/profile/Profile.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -289,12 +289,20 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1529618216666</updated>
-      <workItem from="1529618218329" duration="108000" />
+      <workItem from="1529618218329" duration="346000" />
     </task>
+    <task id="LOCAL-00001" summary="Update Commit">
+      <created>1529618356180</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1529618356180</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="108000" />
+    <option name="totallyTimeSpent" value="346000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="720" extended-state="0" />
@@ -332,6 +340,10 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Update Commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update Commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
